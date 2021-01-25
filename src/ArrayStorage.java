@@ -8,6 +8,7 @@ public class ArrayStorage {
     int index;
 
     void clear() {
+        Arrays.fill(storage, 0, size() + 1, 0);
     }
 
     void save(Resume r) {
@@ -26,7 +27,23 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
+        int sizeArr = size();
+        int number = 0;
+        for (int i = 0; i < sizeArr; i++) {
+            if (storage[i].uuid == uuid) {
+                number = i;
+                break;
+            }
+        }
+
+        while (sizeArr - 1 != number) {
+            storage[number] = storage[number + 1];
+            number++;
+        }
+        storage[number] = null;
+        sizeArr--;
     }
+
 
     /**
      * @return array, contains only Resumes in storage (without null)
@@ -43,10 +60,6 @@ public class ArrayStorage {
             }
         }
         return size;
-    }
-
-    public int getIndex() {
-        return index;
     }
 
     public void setIndex(int index) {
