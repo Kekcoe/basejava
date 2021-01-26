@@ -35,8 +35,6 @@ public class MainArray {
                     r = new Resume();
                     r.uuid = uuid;
                     ARRAY_STORAGE.save(r);
-                    index++;
-                    ARRAY_STORAGE.setIndex(index);
                     printAll();
                     break;
                 case "delete":

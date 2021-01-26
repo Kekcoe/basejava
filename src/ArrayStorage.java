@@ -5,43 +5,75 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
-    int index;
+    int size = 0;
 
     void clear() {
-        Arrays.fill(storage, 0, size() + 1, 0);
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     void save(Resume r) {
-        storage[index] = r;
+        storage[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
-        int i;
-        for (i = 0; i < size(); i++) {
-            if (storage[i].uuid == uuid) {
-                break;
+        for (int i = 0; i < size - 1; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
         }
-
-        return storage[i];
+        return null;
     }
 
-    void delete(String uuid) {
-        int sizeArr = size();
-        int number = 0;
-        for (int i = 0; i < sizeArr; i++) {
-            if (storage[i].uuid == uuid) {
-                number = i;
-                break;
-            }
-        }
 
-        while (sizeArr - 1 != number) {
-            storage[number] = storage[number + 1];
+    void delete(String uuid) {
+//        int number = 0;
+//        for (int i = 0; i < size; i++) {
+//            if (storage[i].uuid == uuid) {
+//                number = i;
+//                break;
+//            }
+//        }
+//
+//        while (size - 1 != number) {
+//            storage[number] = storage[number + 1];
+//            number++;
+//        }
+//        storage[number] = null;
+//        size--;
+//        String temp = null;
+//        int number = 0;
+//        int i = 0;
+//        do{
+//            for (i = 0; i < size ; i++) {
+//                temp = storage[i].uuid;
+//            }
+//
+//        }while(uuid != temp);
+//        number = i;
+//        while (size - 1 != number) {
+//          storage[number] = storage[number + 1];
+//           number++;
+//       }
+//        size--;
+        int number = 0;
+        boolean found = false;
+
+        while (number < size) {
+            if (storage[number].uuid == uuid) {
+                found = true;
+            }
+            if (found) {
+                storage[number] = storage[number + 1];
+
+            }
             number++;
         }
-        storage[number] = null;
-        sizeArr--;
+        if(found) {
+            size--;
+        }
+
     }
 
 
@@ -49,20 +81,12 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, size());
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
-        int size = 0;
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] != null) {
-                size++;
-            }
-        }
         return size;
     }
 
-    public void setIndex(int index) {
-        this.index = index;
-    }
+
 }
