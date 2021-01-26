@@ -26,37 +26,7 @@ public class ArrayStorage {
         return null;
     }
 
-
     void delete(String uuid) {
-//        int number = 0;
-//        for (int i = 0; i < size; i++) {
-//            if (storage[i].uuid == uuid) {
-//                number = i;
-//                break;
-//            }
-//        }
-//
-//        while (size - 1 != number) {
-//            storage[number] = storage[number + 1];
-//            number++;
-//        }
-//        storage[number] = null;
-//        size--;
-//        String temp = null;
-//        int number = 0;
-//        int i = 0;
-//        do{
-//            for (i = 0; i < size ; i++) {
-//                temp = storage[i].uuid;
-//            }
-//
-//        }while(uuid != temp);
-//        number = i;
-//        while (size - 1 != number) {
-//          storage[number] = storage[number + 1];
-//           number++;
-//       }
-//        size--;
         int number = 0;
         boolean found = false;
 
@@ -70,10 +40,9 @@ public class ArrayStorage {
             }
             number++;
         }
-        if(found) {
+        if (found) {
             size--;
         }
-
     }
 
 
@@ -87,6 +56,4 @@ public class ArrayStorage {
     int size() {
         return size;
     }
-
-
 }
