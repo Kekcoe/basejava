@@ -4,7 +4,3 @@ out
 log
 *.md
 
-
-/src/com/basejava/webapp/exception/ExistStorageException.java
-/src/com/basejava/webapp/exception/NotExistStorageException.java
-/src/com/basejava/webapp/exception/StorageException.java
