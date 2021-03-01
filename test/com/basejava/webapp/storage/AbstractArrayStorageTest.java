@@ -16,7 +16,7 @@ public abstract class AbstractArrayStorageTest {
     private static final Resume RESUME2 = new Resume("uuid2");
     private static final Resume RESUME3 = new Resume("uuid3");
 
-    public AbstractArrayStorageTest(Storage storage) {
+    protected AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -29,12 +29,10 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    void update() throws NotExistStorageException {
+    void update() {
         storage.update(RESUME1);
         storage.get("uuid1");
         assertSame(RESUME1, storage.get("uuid1"), "Testing update method");
-
-        assertThrows(NotExistStorageException.class, () -> storage.update(new Resume("uuid4")));
     }
 
     @Test
@@ -42,16 +40,7 @@ public abstract class AbstractArrayStorageTest {
         Resume[] expected = {RESUME1, RESUME2, RESUME3};
         Resume[] actual = storage.getAll();
         assertArrayEquals(expected, actual);
-        assertThrows(ExistStorageException.class,
-                () -> storage.save(RESUME2), "If resume exists should thrown");
-        storage.clear();
-        StorageException exception = assertThrows(StorageException.class,
-                () -> {
-                    for (int i = 0; i <= 10000; i++) {
-                        storage.save(new Resume("uuid" + i));
-                    }
-                });
-        assertEquals("Storage overflow", exception.getMessage());
+
     }
 
     @Test
@@ -68,7 +57,6 @@ public abstract class AbstractArrayStorageTest {
     @Test
     void get() {
         assertEquals(new Resume("uuid1"), storage.get("uuid1"));
-        assertThrows(NotExistStorageException.class, () -> storage.update(new Resume("uuid4")));
     }
 
     @Test
@@ -78,12 +66,30 @@ public abstract class AbstractArrayStorageTest {
         Resume[] actual = storage.getAll();
         assertArrayEquals(expected, actual);
         assertEquals(2, storage.size());
-        assertThrows(NotExistStorageException.class, () -> storage.update(new Resume("uuid4")));
     }
 
     @Test
     void getAll() {
         Resume[] expectedResume = {RESUME1, RESUME2, RESUME3};
         assertArrayEquals(expectedResume, storage.getAll(), "Testing method 'getAll'");
+    }
+
+    @Test
+    void testExistStorageException() {
+        assertThrows(ExistStorageException.class, () -> storage.save(RESUME2), "If resume exists should thrown");
+    }
+
+    @Test
+    void testOverflowStorageException() {
+        assertThrows(StorageException.class, () -> {
+            for (int i = 0; i <= AbstractArrayStorage.STORAGE_LIMIT; i++) {
+                storage.save(new Resume("uuid"));
+            }
+        });
+    }
+
+    @Test
+    void testNotExistStorageException() {
+        assertThrows(NotExistStorageException.class, () -> storage.update(new Resume("uuid4")));
     }
 }
