@@ -15,6 +15,7 @@ public abstract class AbstractArrayStorageTest {
     private static final Resume RESUME1 = new Resume("uuid1");
     private static final Resume RESUME2 = new Resume("uuid2");
     private static final Resume RESUME3 = new Resume("uuid3");
+    private static final Resume RESUME4 = new Resume("uuid4");
 
 
     protected AbstractArrayStorageTest(Storage storage) {
@@ -31,10 +32,8 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     void update() {
-        Resume resume4 = new Resume("uuid4");
-        storage.save(resume4);
-        storage.update(resume4);
-        assertSame(resume4, storage.get("uuid4"), "Testing update method");
+        storage.update(RESUME1);
+        assertSame(RESUME1, storage.get("uuid1"), "Testing update method");
     }
 
     @Test
@@ -44,11 +43,11 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     void save() {
-        Resume resume4 = new Resume("uuid4");
-        storage.save(resume4);
-        Resume[] expected = {RESUME1, RESUME2, RESUME3, resume4};
+        storage.save(RESUME4);
+        Resume[] expected = {RESUME1, RESUME2, RESUME3, RESUME4};
         Resume[] actual = storage.getAll();
         assertArrayEquals(expected, actual);
+        assertEquals(4, storage.size());
     }
 
     @Test
@@ -63,11 +62,9 @@ public abstract class AbstractArrayStorageTest {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
-            fail(e.getMessage());
+            fail("Overflow of storage happened early");
         }
-        assertThrows(StorageException.class, () -> {
-            storage.save(new Resume());
-        });
+        assertThrows(StorageException.class, () -> { storage.save(new Resume()); });
     }
 
     @Test
