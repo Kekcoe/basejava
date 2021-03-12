@@ -1,14 +1,12 @@
 package com.basejava.webapp.storage;
 
-import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.LinkedList;
 
 public class ListStorage extends AbstractStorage {
-    private final LinkedList<Resume> listStorage = new LinkedList<Resume>();
-
+    private final LinkedList<Resume> listStorage = new LinkedList<>();
 
     @Override
     public void clear() {
@@ -16,19 +14,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void update(Resume resume) {
-        if (!isResumeExist(resume)) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        listStorage.set(listStorage.indexOf(resume), resume);
-        System.out.println("Resume " + resume.getUuid() + " was updated");
-    }
-
-    @Override
-    public void save(Resume resume) {
-        if (isResumeExist(resume)) {
-            throw new ExistStorageException(resume.getUuid());
-        }
+    public void saveResumeToStorageMain(Resume resume) {
         listStorage.add(resume);
     }
 
@@ -42,18 +28,14 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void delete(String uuid) {
-        Resume resume = new Resume(uuid);
-        if (!isResumeExist(resume)) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        listStorage.remove(resume);
+    public void deleteResumeFromStorageMain(String uuid) {
+        listStorage.remove(new Resume(uuid));
     }
 
     @Override
     public Resume[] getAll() {
         Resume[] listStorageToArray = new Resume[listStorage.size()];
-                listStorageToArray = listStorage.toArray(listStorageToArray);
+        listStorageToArray = listStorage.toArray(listStorageToArray);
         return listStorageToArray;
     }
 
@@ -62,8 +44,22 @@ public class ListStorage extends AbstractStorage {
         return listStorage.size();
     }
 
+    @Override
+    protected int getIndex(String uuid) {
+        return listStorage.indexOf(new Resume(uuid));
+    }
 
     private boolean isResumeExist(Resume resume) {
         return listStorage.contains(resume);
+    }
+
+    protected void updateResume(Resume resume) {
+        listStorage.set(listStorage.indexOf(resume), resume);
+        System.out.println("Resume " + resume.getUuid() + " was updated");
+    }
+
+    @Override
+    protected Resume getResumeFromStorage(String uuid) {
+        return listStorage.get(getIndex(uuid));
     }
 }
