@@ -1,12 +1,12 @@
 package com.basejava.webapp.storage;
 
-import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private final LinkedList<Resume> listStorage = new LinkedList<>();
+    private final List<Resume> listStorage = new LinkedList<>();
 
     @Override
     public void clear() {
@@ -14,29 +14,19 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void saveResumeToStorageMain(Resume resume) {
+    public void saveResumeToStorage(Resume resume, int index) {
         listStorage.add(resume);
     }
 
     @Override
-    public Resume get(String uuid) {
-        Resume resume = new Resume(uuid);
-        if (!isResumeExist(resume)) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        return listStorage.get(listStorage.indexOf(resume));
-    }
-
-    @Override
-    public void deleteResumeFromStorageMain(String uuid) {
+    public void removeResumeFromStorage(String uuid) {
         listStorage.remove(new Resume(uuid));
     }
 
     @Override
     public Resume[] getAll() {
         Resume[] listStorageToArray = new Resume[listStorage.size()];
-        listStorageToArray = listStorage.toArray(listStorageToArray);
-        return listStorageToArray;
+        return listStorage.toArray(listStorageToArray);
     }
 
     @Override
@@ -49,17 +39,13 @@ public class ListStorage extends AbstractStorage {
         return listStorage.indexOf(new Resume(uuid));
     }
 
-    private boolean isResumeExist(Resume resume) {
-        return listStorage.contains(resume);
-    }
-
-    protected void updateResume(Resume resume) {
-        listStorage.set(listStorage.indexOf(resume), resume);
+    protected void updateResume(Resume resume, int index) {
+        listStorage.set(index, resume);
         System.out.println("Resume " + resume.getUuid() + " was updated");
     }
 
     @Override
-    protected Resume getResumeFromStorage(String uuid) {
-        return listStorage.get(getIndex(uuid));
+    protected Resume getResumeFromStorage(String uuid, int index) {
+        return listStorage.get(index);
     }
 }

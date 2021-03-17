@@ -15,18 +15,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void updateResume(Resume resume) {
-        int index = getIndex(resume.getUuid());
+    public void updateResume(Resume resume, int index) {
         storage[index] = resume;
         System.out.println("Resume " + resume.getUuid() + " was updated");
     }
 
     @Override
-    public void saveResumeToStorageMain(Resume resume) {
+    public void saveResumeToStorage(Resume resume, int index) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        addResumeToStorage(resume, getIndex(resume.getUuid()));
+        addResumeToArrayStorage(resume, index);
         size++;
     }
 
@@ -37,8 +36,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void deleteResumeFromStorageMain(String uuid) {
-        deleteResumeFromStorage(uuid, getIndex(uuid));
+    public void removeResumeFromStorage(String uuid) {
+        deleteResumeFromArrayStorage(uuid, getIndex(uuid));
         storage[size - 1] = null;
         size--;
     }
@@ -49,14 +48,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected Resume getResumeFromStorage(String uuid) {
-        return storage[getIndex(uuid)];
+    protected Resume getResumeFromStorage(String uuid, int index) {
+        return storage[index];
     }
 
-    protected abstract int getIndex(String uuid);
+    protected abstract void addResumeToArrayStorage(Resume resume, int index);
 
-    protected abstract void addResumeToStorage(Resume resume, int index);
-
-    protected abstract void deleteResumeFromStorage(String uuid, int index);
+    protected abstract void deleteResumeFromArrayStorage(String uuid, int index);
 
 }

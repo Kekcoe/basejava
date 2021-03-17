@@ -6,15 +6,14 @@ import com.basejava.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-
     public abstract void clear();
 
-    public  void update(Resume resume){
+    public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
         }
-        updateResume(resume);
+        updateResume(resume, index);
     }
 
     public void save(Resume resume) {
@@ -22,15 +21,15 @@ public abstract class AbstractStorage implements Storage {
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         }
-        saveResumeToStorageMain(resume);
+        saveResumeToStorage(resume, index);
     }
 
-     public Resume get(String uuid) {
+    public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
-        return getResumeFromStorage(uuid);
+        return getResumeFromStorage(uuid, index);
     }
 
     public void delete(String uuid) {
@@ -38,21 +37,17 @@ public abstract class AbstractStorage implements Storage {
         if (index < 0) {
             throw new NotExistStorageException(uuid);
         }
-        deleteResumeFromStorageMain(uuid);
+        removeResumeFromStorage(uuid);
     }
-
-    public abstract Resume[] getAll();
-
-    public abstract int size();
 
     protected abstract int getIndex(String uuid);
 
-    protected abstract void updateResume(Resume resume);
+    protected abstract void updateResume(Resume resume, int index);
 
-    protected abstract void saveResumeToStorageMain(Resume resume);
+    protected abstract void saveResumeToStorage(Resume resume, int index);
 
-    protected abstract Resume getResumeFromStorage(String uuid);
+    protected abstract Resume getResumeFromStorage(String uuid, int index);
 
-    protected abstract void deleteResumeFromStorageMain(String uuid);
+    protected abstract void removeResumeFromStorage(String uuid);
 
 }

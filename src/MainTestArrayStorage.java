@@ -26,8 +26,6 @@ public class MainTestArrayStorage {
              System.out.println(notExistStorageException);
          }
 
-
-
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
         printAll();
