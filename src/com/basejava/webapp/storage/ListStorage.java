@@ -19,14 +19,14 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void removeResumeFromStorage(String uuid) {
-        listStorage.remove(new Resume(uuid));
+    public void removeResumeFromStorage(String uuid, int index) {
+        listStorage.remove(index);
     }
 
     @Override
     public Resume[] getAll() {
-        Resume[] listStorageToArray = new Resume[listStorage.size()];
-        return listStorage.toArray(listStorageToArray);
+        Resume[] resumes = new Resume[listStorage.size()];
+        return listStorage.toArray(resumes);
     }
 
     @Override

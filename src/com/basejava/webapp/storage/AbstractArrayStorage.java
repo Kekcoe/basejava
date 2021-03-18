@@ -36,8 +36,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void removeResumeFromStorage(String uuid) {
-        deleteResumeFromArrayStorage(uuid, getIndex(uuid));
+    public void removeResumeFromStorage(String uuid, int index) {
+        deleteResumeFromArrayStorage(uuid, index);
         storage[size - 1] = null;
         size--;
     }
