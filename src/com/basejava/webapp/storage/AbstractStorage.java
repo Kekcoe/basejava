@@ -47,5 +47,4 @@ public abstract class AbstractStorage implements Storage {
     protected abstract Resume getResumeFromStorage(String uuid, int index);
 
     protected abstract void removeResumeFromStorage(String uuid, int index);
-
 }
