@@ -27,17 +27,17 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void saveResumeToStorage(Resume resume, int index) {
+    protected void saveResume(Resume resume, int index) {
         mapStorage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume getResumeFromStorage(String uuid, int index) {
+    protected Resume getResume(String uuid, int index) {
         return mapStorage.get(uuid);
     }
 
     @Override
-    protected void removeResumeFromStorage(String uuid, int index) {
+    protected void removeResume(String uuid, int index) {
         mapStorage.remove(uuid);
     }
 
