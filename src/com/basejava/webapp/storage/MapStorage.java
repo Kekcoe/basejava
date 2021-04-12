@@ -5,40 +5,37 @@ import com.basejava.webapp.model.Resume;
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
-    private final Map<String, Resume> mapStorage = new LinkedHashMap<>();
+    private final Map<String, Resume> mapStorage = new HashMap<>();
 
     @Override
-    protected int getIndex(String uuid) {
-        Resume resume = new Resume(uuid);
-        Set<String> keys = mapStorage.keySet();
-        List<String> listKeys = new ArrayList<>(keys);
-        for (int i = 0; i < listKeys.size(); i++) {
-            if (uuid == listKeys.get(i)) {
-                return i;
-            }
-        }
-        return listKeys.indexOf(resume);
+    protected String getSearchKey(String uuid) {
+        return mapStorage.containsKey(uuid) ? uuid : null;
     }
 
     @Override
-    protected void updateResume(Resume resume, int index) {
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
+    }
+
+    @Override
+    protected void updateResume(Resume resume, Object searchKey) {
         mapStorage.put(resume.getUuid(), resume);
         System.out.println("Resume " + resume.getUuid() + " was updated");
     }
 
     @Override
-    protected void saveResume(Resume resume, int index) {
+    protected void saveResume(Resume resume, Object searchKey) {
         mapStorage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Resume getResume(String uuid, int index) {
-        return mapStorage.get(uuid);
+    protected Resume getResume(Object searchKey) {
+        return mapStorage.get(searchKey);
     }
 
     @Override
-    protected void removeResume(String uuid, int index) {
-        mapStorage.remove(uuid);
+    protected void removeResume(Object searchKey) {
+        mapStorage.remove(searchKey);
     }
 
     @Override
@@ -47,10 +44,10 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
+    public List<Resume> getAllSorted() {
         List<Resume> listResume = new ArrayList<>(mapStorage.values());
-        Resume[] arrResume = new Resume[listResume.size()];
-        return listResume.toArray(arrResume);
+        Collections.sort(listResume);
+        return listResume;
     }
 
     @Override

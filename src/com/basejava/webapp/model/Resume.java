@@ -6,10 +6,10 @@ package com.basejava.webapp.model;
 public class Resume implements Comparable<Resume> {
 
     // Unique identifier
-    private final String uuid;
+    private String uuid;
     private final String fullName;
 
-    public Resume(String fullName,String uuid) {
+    public Resume(String fullName, String uuid) {
         this.uuid = uuid;
         this.fullName = fullName;
     }
@@ -22,20 +22,22 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        Resume resume = (Resume) obj;
-
+    public boolean equals(Object o) {
+        System.out.println("Equals " + o + " is working");
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Resume resume = (Resume) o;
+        if (!uuid.equals(resume.uuid)) return false;
         return fullName.equals(resume.fullName);
     }
 
     @Override
     public int hashCode() {
-        return fullName.hashCode();
+        System.out.println("Hashcode is working");
+        int result = uuid.hashCode();
+        result = 31 * result + fullName.hashCode();
+        return result;
     }
 
     @Override
@@ -46,7 +48,7 @@ public class Resume implements Comparable<Resume> {
     @Override
     public int compareTo(Resume resume) {
         int result = this.fullName.compareTo(resume.fullName);
-        if(result == 0) {
+        if (result == 0) {
             this.uuid.compareTo(resume.uuid);
         }
         return result;

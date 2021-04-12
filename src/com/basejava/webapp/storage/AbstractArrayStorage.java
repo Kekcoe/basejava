@@ -4,6 +4,7 @@ import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
@@ -15,17 +16,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void updateResume(Resume resume, int index) {
-        storage[index] = resume;
+    public void updateResume(Resume resume, Object index) {
+        storage[(Integer) index] = resume;
         System.out.println("Resume " + resume.getUuid() + " was updated");
     }
 
     @Override
-    public void saveResume(Resume resume, int index) {
+    public void saveResume(Resume resume, Object index) {
         if (size >= STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", resume.getUuid());
         }
-        addResumeToArrayStorage(resume, index);
+        addResumeToArrayStorage(resume, (Integer) index);
         size++;
     }
 
@@ -36,24 +37,30 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public void removeResume(String uuid, int index) {
-        deleteResumeFromArrayStorage(uuid, index);
+    public void removeResume(Object index) {
+        deleteResumeFromArrayStorage((Integer) index);
         storage[size - 1] = null;
         size--;
     }
 
     @Override
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
+    public List<Resume> getAllSorted() {
+        return Arrays.asList(Arrays.copyOf(storage, size));
     }
 
     @Override
-    protected Resume getResume(String uuid, int index) {
-        return storage[index];
+    protected Resume getResume(Object index) {
+        return storage[(Integer) index];
     }
+
+    protected abstract Integer getSearchKey(String uuid);
 
     protected abstract void addResumeToArrayStorage(Resume resume, int index);
 
-    protected abstract void deleteResumeFromArrayStorage(String uuid, int index);
+    protected abstract void deleteResumeFromArrayStorage(int index);
 
+    @Override
+    protected boolean isExist(Object index) {
+        return (Integer) index >= 0;
+    }
 }

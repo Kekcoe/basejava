@@ -2,11 +2,11 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    private final List<Resume> listStorage = new LinkedList<>();
+    private final List<Resume> listStorage = new ArrayList<>();
 
     @Override
     public void clear() {
@@ -14,19 +14,18 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public void saveResume(Resume resume, int index) {
+    public void saveResume(Resume resume, Object searchKey) {
         listStorage.add(resume);
     }
 
     @Override
-    public void removeResume(String uuid, int index) {
-        listStorage.remove(index);
+    public void removeResume(Object searchKey) {
+        listStorage.remove(((Integer) searchKey).intValue());
     }
 
     @Override
-    public Resume[] getAll() {
-        Resume[] resumes = new Resume[listStorage.size()];
-        return listStorage.toArray(resumes);
+    public List<Resume> getAllSorted() {
+        return listStorage;
     }
 
     @Override
@@ -35,17 +34,27 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected int getIndex(String uuid) {
-        return listStorage.indexOf(new Resume(uuid));
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < listStorage.size(); i++) {
+            if (listStorage.get(i).getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return null;
     }
 
-    protected void updateResume(Resume resume, int index) {
-        listStorage.set(index, resume);
+    @Override
+    protected boolean isExist(Object searchKey) {
+        return searchKey != null;
+    }
+
+    protected void updateResume(Resume resume, Object searchKey) {
+        listStorage.set((Integer) searchKey, resume);
         System.out.println("Resume " + resume.getUuid() + " was updated");
     }
 
     @Override
-    protected Resume getResume(String uuid, int index) {
-        return listStorage.get(index);
+    protected Resume getResume(Object searchKey) {
+        return listStorage.get((Integer) searchKey);
     }
 }
