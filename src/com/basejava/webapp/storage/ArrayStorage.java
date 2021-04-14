@@ -17,12 +17,12 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void addResumeToArrayStorage(Resume resume, int index) {
+    protected void saveToArray(Resume resume, int index) {
         storage[size] = resume;
     }
 
     @Override
-    protected void deleteResumeFromArrayStorage(int index) {
+    protected void deleteFromArray(int index) {
         storage[index] = storage[size - 1];
     }
 }
