@@ -95,7 +95,6 @@ public abstract class AbstractStorageTest {
     void getAllSorted() {
         List<Resume> expected = Arrays.asList(RESUME1, RESUME2, RESUME3);
         List<Resume> actual = storage.getAllSorted();
-        Collections.sort(actual);
         Collections.sort(expected);
         assertEquals(expected, actual, "Testing method 'getAll'");
     }
